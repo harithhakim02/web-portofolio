@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fbfcfd" />
+    <style>
+      /* Paint a valid theme before React, Vite CSS, or the preloader can mount. */
+      :root {
+        color-scheme: light;
+        --page-bg: #fbfcfd;
+        --gradient-mid: #e8f2f0;
+        --gradient-end: #f8fafc;
+        --text-main: #18181b;
+        --text-muted: #71717a;
+        --accent: #b87962;
+        --accent-soft: rgb(184 121 98 / 13%);
+      }
+      :root.dark {
+        color-scheme: dark;
+        --text-main: #f4f4f5;
+        --text-muted: #a1a1aa;
+      }
+      html,
+      body {
+        margin: 0;
+        min-width: 320px;
+        min-height: 100%;
+        background-color: var(--page-bg) !important;
+        color: var(--text-main);
+      }
+      html {
+        min-height: 100%;
+        overflow-x: clip;
+        overscroll-behavior-x: none;
+      }
+      body {
+        position: relative;
+        min-height: 100vh;
+        min-height: 100dvh;
+        background-color: var(--page-bg) !important;
+      }
+      #root {
+        min-height: 100vh;
+        min-height: 100dvh;
+        background-color: var(--page-bg);
+      }
+      /* Keep the browser canvas, document, app and intro on the exact same opaque color. */
+      html,
+      body,
+      #root {
+        background-color: var(--page-bg) !important;
+      }
+    </style>
+    <script>
+      // Synchronous theme bootstrap: set every paint-critical value on <html>.
+      // Do not touch document.body here; it has not been parsed yet.
+      (() => {
+        const root = document.documentElement;
+        const palettes = {
+          white: {
+            light: ["#fbfcfd", "#e8f2f0", "#f8fafc"],
+            dark: ["#111827", "#1c2030", "#171923"],
+          },
+          cream: {
+            light: ["#fffaf0", "#f4ead8", "#faf5eb"],
+            dark: ["#211d19", "#30271f", "#211f1c"],
+          },
+          sage: {
+            light: ["#f5f8f1", "#e1ebdc", "#f0f4ec"],
+            dark: ["#17211c", "#26352b", "#1b241f"],
+          },
+          blue: {
+            light: ["#f3f8fc", "#dceaf4", "#edf4f8"],
+            dark: ["#151e29", "#203347", "#19232e"],
+          },
+          lavender: {
+            light: ["#faf7ff", "#e9e0f5", "#f3eff9"],
+            dark: ["#1d1928", "#30263f", "#211d2d"],
+          },
+          midnight: {
+            light: ["#f1f3f8", "#dce2ee", "#e9edf5"],
+            dark: ["#0c101a", "#1b2335", "#111827"],
+          },
+          charcoal: {
+            light: ["#f5f6f4", "#e3e7e2", "#edf0ed"],
+            dark: ["#171b19", "#29312c", "#1d2420"],
+          },
+        };
+        const accents = {
+          clay: "#B87962",
+          blue: "#3b82f6",
+          green: "#16a34a",
+          rose: "#f43f5e",
+          orange: "#f08a3c",
+          teal: "#0d9488",
+          slate: "#718895",
+        };
+        let mode = "auto",
+          palette = "white",
+          accentId = "clay",
+          systemDark = false;
+        try {
+          mode = localStorage.getItem("theme-mode") || mode;
+          palette = localStorage.getItem("theme-palette") || palette;
+          accentId = localStorage.getItem("theme-accent-v2") || accentId;
+          systemDark =
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches;
+        } catch (_) {}
+        const dark = mode === "dark" || (mode === "auto" && systemDark);
+        const stops = (palettes[palette] || palettes.white)[
+          dark ? "dark" : "light"
+        ];
+        const accent = accents[accentId] || accents.clay;
+        root.classList.toggle("dark", dark);
+        root.dataset.theme = dark ? "dark" : "light";
+        root.style.colorScheme = dark ? "dark" : "light";
+        root.style.backgroundColor = stops[0];
+        root.style.setProperty("--page-bg", stops[0]);
+        root.style.setProperty("--gradient-mid", stops[1]);
+        root.style.setProperty("--gradient-end", stops[2]);
+        root.style.setProperty("--accent", accent);
+        root.style.setProperty(
+          "--accent-soft",
+          `color-mix(in srgb, ${accent} 13%, transparent)`,
+        );
+        const themeMeta = document.querySelector('meta[name="theme-color"]');
+        if (themeMeta) themeMeta.setAttribute("content", stops[0]);
+      })();
+    </script>
+    <meta name="description" content="Harith Hakim is a frontend web developer focused on building responsive, accessible, and user-friendly web experiences with React, JavaScript, and modern web technologies." />
+    <meta name="author" content="Harith Hakim" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="keywords" content="Harith Hakim, Frontend Developer, React Developer, Web Developer, JavaScript, React.js, Portfolio" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Harith Hakim — Frontend Web Developer" />
+    <meta property="og:description" content="Explore the portfolio, selected projects, experience, and frontend development skills of Harith Hakim." />
+    <meta property="og:image" content="/profile-photo.webp" />
+    <meta property="og:image:alt" content="Harith Hakim — Frontend Web Developer" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Harith Hakim — Frontend Web Developer" />
+    <meta name="twitter:description" content="Portfolio, selected projects, experience, and frontend development skills of Harith Hakim." />
+    <meta name="twitter:image" content="/profile-photo.webp" />
+    <link rel="preload" as="image" href="/profile-photo.webp" fetchpriority="high" />
+    <title>Harith Hakim — Frontend Web Developer | Portfolio</title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Harith Hakim",
+        "jobTitle": "Frontend Web Developer",
+        "description": "Frontend web developer focused on responsive and user-friendly web experiences.",
+        "knowsAbout": ["Frontend Development", "React", "JavaScript", "HTML", "CSS", "Responsive Web Design"],
+        "sameAs": [
+          "https://github.com/harithhakim02",
+          "https://www.linkedin.com/in/harith-hakim-30980b211/",
+          "https://www.instagram.com/harithhakimm_/"
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
