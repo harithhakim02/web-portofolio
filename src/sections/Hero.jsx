@@ -88,7 +88,7 @@ export default function Hero() {
                 event.currentTarget.src = "/profile-photo.webp";
               }}
               alt="Foto profil Hakim"
-              fetchPriority="high"
+              fetchpriority="high"
               decoding="async"
               width="1080"
               height="1350"
