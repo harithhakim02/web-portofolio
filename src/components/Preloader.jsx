@@ -11,10 +11,11 @@ export default function Preloader() {
     const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    const revealTimer = window.setTimeout(() => setLeaving(true), reduceMotion ? 420 : 980);
+    // Keep the intro brief so it does not visually hold back the first screen.
+    const revealTimer = window.setTimeout(() => setLeaving(true), reduceMotion ? 120 : 260);
     const removeTimer = window.setTimeout(
       () => setVisible(false),
-      reduceMotion ? 460 : 1420,
+      reduceMotion ? 180 : 700,
     );
     return () => {
       window.clearTimeout(revealTimer);

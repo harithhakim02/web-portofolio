@@ -83,15 +83,12 @@ export default function Hero() {
           <div className="relative h-full overflow-hidden rounded-[1.65rem]">
             <img
               src="/profile-photo.webp"
-              onError={(event) => {
-                event.currentTarget.onerror = null;
-                event.currentTarget.src = "/profile-photo.webp";
-              }}
               alt="Foto profil Hakim"
-              fetchpriority="high"
+              loading="eager"
+              fetchPriority="high"
               decoding="async"
-              width="1080"
-              height="1350"
+              width="840"
+              height="1050"
               className="h-full w-full object-cover object-center"
             />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-slate-950/10" />
