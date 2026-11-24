@@ -64,15 +64,7 @@ export default function Navbar() {
 
     elements.forEach((element) => observer.observe(element));
 
-    const handleTopScroll = () => {
-      if (window.scrollY < 80) setActive("top");
-    };
-    window.addEventListener("scroll", handleTopScroll, { passive: true });
-
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("scroll", handleTopScroll);
-    };
+    return () => observer.disconnect();
   }, [location.pathname]);
 
   const goToSection = (id) => {

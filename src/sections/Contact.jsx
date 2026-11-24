@@ -75,7 +75,6 @@ export default function Contact() {
 
   return (
     <section
-      id="contact"
       className="section-space border-t border-zinc-100/70 dark:border-zinc-900 section-alt"
     >
       <div className="container-width grid gap-12 md:grid-cols-[.8fr_1.2fr]">

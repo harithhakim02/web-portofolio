@@ -1,11 +1,53 @@
-import { useEffect, useLayoutEffect } from "react";
+import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Hero from "../sections/Hero";
 import About from "../sections/About";
 import Skills from "../sections/Skills";
 import Projects from "../sections/Projects";
 import Experience from "../sections/Experience";
-import Contact from "../sections/Contact";
+const Contact = lazy(() => import("../sections/Contact"));
+
+function DeferredContact() {
+  const sectionRef = useRef(null);
+  const [shouldLoad, setShouldLoad] = useState(false);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return undefined;
+
+    // Load the form and its validation libraries shortly before the section is
+    // likely to enter the viewport, rather than during the initial page render.
+    if (!("IntersectionObserver" in window)) {
+      setShouldLoad(true);
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoad(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "900px 0px", threshold: 0 },
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div id="contact" ref={sectionRef} className="home-glass-section">
+      {shouldLoad ? (
+        <Suspense fallback={<div className="section-space min-h-[520px]" aria-hidden="true" />}>
+          <Contact />
+        </Suspense>
+      ) : (
+        <div className="section-space min-h-[520px]" aria-hidden="true" />
+      )}
+    </div>
+  );
+}
 
 export default function Home() {
   const location = useLocation();
@@ -75,9 +117,7 @@ export default function Home() {
       <div id="experience" className="home-glass-section">
         <Experience />
       </div>
-      <div id="contact" className="home-glass-section">
-        <Contact />
-      </div>
+      <DeferredContact />
     </>
   );
 }
