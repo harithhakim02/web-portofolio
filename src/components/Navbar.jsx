@@ -22,52 +22,56 @@ export default function Navbar() {
       return undefined;
     }
 
-    let frame = 0;
-    const updateActiveSection = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
+    const elements = ["top", ...sectionIds]
+      .map((id) => document.getElementById(id))
+      .filter(Boolean);
+
+    if (!("IntersectionObserver" in window)) return undefined;
+
+    const visibleSections = new Map();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            visibleSections.set(entry.target.id, entry.target);
+          } else {
+            visibleSections.delete(entry.target.id);
+          }
+        });
+
         if (window.scrollY < 80) {
           setActive("top");
           return;
         }
 
-        // Pick the section crossing a fixed reading line below the sticky navbar.
-        // This avoids IntersectionObserver ratio ties when adjacent sections are tall.
         const readingLine = Math.min(window.innerHeight * 0.38, 340);
-        const sections = ["top", ...sectionIds]
-          .map((id) => document.getElementById(id))
-          .filter(Boolean)
+        const current = [...visibleSections.values()]
           .map((element) => ({
             id: element.id,
             top: element.getBoundingClientRect().top,
             bottom: element.getBoundingClientRect().bottom,
-          }));
+          }))
+          .filter(
+            (section) =>
+              section.top <= readingLine && section.bottom > readingLine,
+          )
+          .sort((a, b) => b.top - a.top)[0];
 
-        const current = sections.find(
-          (section) =>
-            section.top <= readingLine && section.bottom > readingLine,
-        );
-        if (current) {
-          setActive(current.id);
-          return;
-        }
+        if (current) setActive(current.id);
+      },
+      { rootMargin: "-30% 0px -60% 0px", threshold: 0 },
+    );
 
-        const next = sections.find((section) => section.top > readingLine);
-        setActive(
-          next
-            ? sections[sections.indexOf(next) - 1]?.id || next.id
-            : "contact",
-        );
-      });
+    elements.forEach((element) => observer.observe(element));
+
+    const handleTopScroll = () => {
+      if (window.scrollY < 80) setActive("top");
     };
+    window.addEventListener("scroll", handleTopScroll, { passive: true });
 
-    updateActiveSection();
-    window.addEventListener("scroll", updateActiveSection, { passive: true });
-    window.addEventListener("resize", updateActiveSection);
     return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", updateActiveSection);
-      window.removeEventListener("resize", updateActiveSection);
+      observer.disconnect();
+      window.removeEventListener("scroll", handleTopScroll);
     };
   }, [location.pathname]);
 

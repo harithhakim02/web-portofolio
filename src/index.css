@@ -1552,3 +1552,68 @@ button, .btn-primary, .btn-secondary, .eyebrow,
     color-mix(in srgb, var(--accent) 13%, var(--page-bg))
   );
 }
+
+
+/* Lightweight rendering profile for touch/mobile devices.
+   Keep the same layout and colors while avoiding expensive blur and reveal effects
+   that can make scrolling stutter on entry-level phones. */
+@media (max-width: 767px), (hover: none) and (pointer: coarse) {
+  header.sticky {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  .surface,
+  .home-glass-section,
+  .hero-photo-caption {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  .home-glass-section {
+    box-shadow: 0 8px 24px rgb(15 23 42 / 4%);
+    transform: none;
+  }
+
+  /* Keep scroll reveal on touch devices, but use only opacity and a small
+     2D translation. Blur, clip-path and perspective are avoided for smoother
+     scrolling on entry-level phones. */
+  .glass-reveal-ready .home-glass-section:not(.is-visible) {
+    opacity: 0;
+    filter: none;
+    clip-path: none;
+    transform: translate3d(0, 16px, 0);
+    transition: none;
+    will-change: opacity, transform;
+  }
+
+  .glass-reveal-ready .home-glass-section {
+    transition:
+      opacity 460ms ease-out,
+      transform 520ms cubic-bezier(.2, .7, .2, 1);
+    will-change: auto;
+  }
+
+  .glass-reveal-ready .home-glass-section.is-visible {
+    opacity: 1;
+    filter: none;
+    clip-path: none;
+    transform: translate3d(0, 0, 0);
+    will-change: auto;
+  }
+
+  .home-glass-section::after,
+  .home-glass-section.is-visible::after {
+    display: none;
+    animation: none !important;
+  }
+
+  .hero-photo-glow,
+  .preloader-orb {
+    display: none;
+  }
+
+  .hero-photo-caption {
+    box-shadow: 0 6px 18px rgb(15 23 42 / 8%);
+  }
+}
