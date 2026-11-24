@@ -156,7 +156,7 @@ export default function ProjectDetail() {
           </article>
 
           <aside className="project-info-panel">
-            <p className="eyebrow">
+            <p className="eyebrow project-info-eyebrow">
               {t.projectDetail.projectInformation}
             </p>
             <h2 className="mt-3 text-xl font-bold">

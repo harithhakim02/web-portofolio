@@ -5,14 +5,16 @@ import {
   ArrowUpRight,
   CalendarDays,
   Sparkles,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import SectionTitle from "../components/SectionTitle";
 import { experiences } from "../data/experiences";
 import { useLanguage } from "../contexts/LanguageContext";
 
-function SectionKicker({ icon: Icon, title, count, note, entriesLabel }) {
+function SectionKicker({ icon: Icon, title, note }) {
   return (
-    <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
+    <div className="mb-7 flex flex-wrap items-end gap-4">
       <div className="flex items-center gap-3">
         <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent-soft)] text-[var(--accent)]">
           <Icon size={19} />
@@ -22,10 +24,6 @@ function SectionKicker({ icon: Icon, title, count, note, entriesLabel }) {
           {note && <p className="muted mt-1 text-xs">{note}</p>}
         </div>
       </div>
-      <span className="font-mono text-xs tracking-widest text-[var(--text-muted)]">
-        {String(count).padStart(2, "0")}{" "}
-        <span className="opacity-50">/ {entriesLabel}</span>
-      </span>
     </div>
   );
 }
@@ -52,7 +50,6 @@ function InstitutionLogo({ src, alt, fallback = "work" }) {
 
 function getLocalizedDescription(description, language) {
   if (!description) return "";
-  // Backward compatibility: plain strings are shown as-is in both languages.
   if (typeof description === "string") return description;
   return description[language] || description.en || description.id || "";
 }
@@ -92,15 +89,31 @@ function ExperienceRail({ items, emptyLabel, labels, language }) {
     );
   return (
     <div className="relative">
-      <div className="mb-3 flex items-center justify-between text-[10px] font-semibold uppercase tracking-[.2em] text-[var(--text-muted)]">
+      <div className="mb-3 flex items-center justify-between gap-3 text-[10px] font-semibold uppercase tracking-[.2em] text-[var(--text-muted)]">
         <span>{labels.careerArchive}</span>
         {hasHorizontalOverflow && (
-          <span className="hidden sm:inline">
-            {labels.scrollHint} <span className="text-[var(--accent)]">↗</span>
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="hidden xs:inline">{labels.scrollHint}</span>
+            <button
+              type="button"
+              aria-label="Scroll previous"
+              onClick={() => railRef.current?.scrollBy({ left: -320, behavior: "smooth" })}
+              className="rail-arrow"
+            >
+              <ChevronLeft size={16} />
+            </button>
+            <button
+              type="button"
+              aria-label="Scroll next"
+              onClick={() => railRef.current?.scrollBy({ left: 320, behavior: "smooth" })}
+              className="rail-arrow"
+            >
+              <ChevronRight size={16} />
+            </button>
+          </div>
         )}
       </div>
-      <div ref={railRef} className="experience-rail flex snap-x snap-mandatory gap-4 overflow-x-auto pb-5">
+      <div ref={railRef} className="experience-rail flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-5">
         {items.map((item, index) => (
           <article
             key={item.id ?? `${item.type}-${item.role}-${index}`}
@@ -127,9 +140,6 @@ function ExperienceRail({ items, emptyLabel, labels, language }) {
               />
             </div>
             <div className="relative z-10 mt-7">
-              <p className="mb-2 font-mono text-[10px] font-bold uppercase tracking-[.22em] text-[var(--accent)]">
-                {labels.position} · {String(index + 1).padStart(2, "0")}
-              </p>
               <h4 className="max-w-[300px] text-2xl font-bold leading-tight tracking-[-.04em]">
                 {item.role}
               </h4>
@@ -144,12 +154,11 @@ function ExperienceRail({ items, emptyLabel, labels, language }) {
           </article>
         ))}
       </div>
-      <style>{`.experience-rail{scrollbar-width:thin;scrollbar-color:var(--accent) color-mix(in srgb,var(--line) 60%,transparent)}.experience-panel{background:linear-gradient(145deg,color-mix(in srgb,var(--page-bg) 88%,white 12%),color-mix(in srgb,var(--accent) 7%,var(--page-bg)));}.dark .experience-panel{background:linear-gradient(145deg,color-mix(in srgb,var(--page-bg) 90%,white 3%),color-mix(in srgb,var(--accent) 13%,var(--page-bg)));}`}</style>
     </div>
   );
 }
 
-function EducationIndex({ items, emptyLabel, labels, language }) {
+function EducationIndex({ items, emptyLabel, labels }) {
   if (!items.length)
     return (
       <p className="muted rounded-2xl border border-dashed border-[var(--line)] p-6 text-sm">
@@ -157,11 +166,11 @@ function EducationIndex({ items, emptyLabel, labels, language }) {
       </p>
     );
   return (
-    <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+    <div className="education-rail grid gap-3 overflow-x-auto pb-4 sm:grid-cols-2 xl:grid-cols-3">
       {items.map((item, index) => (
         <article
           key={item.id ?? `${item.type}-${item.role}-${index}`}
-          className="education-ticket group relative overflow-hidden rounded-2xl border border-[var(--line)] p-5 transition duration-300 hover:-translate-y-1 hover:border-[var(--accent)]"
+          className="education-ticket group relative min-w-0 overflow-hidden rounded-2xl border border-[var(--line)] p-5 transition duration-300 hover:-translate-y-1 hover:border-[var(--accent)]"
         >
           <div className="mb-6 flex items-start justify-between gap-3">
             <InstitutionLogo
@@ -217,9 +226,7 @@ export default function Experience() {
           <SectionKicker
             icon={BriefcaseBusiness}
             title={t.experience.workTitle}
-            count={workItems.length}
             note={t.experience.workNote}
-            entriesLabel={t.experience.entriesLabel}
           />
           <ExperienceRail
             items={workItems}
@@ -232,9 +239,7 @@ export default function Experience() {
           <SectionKicker
             icon={Sparkles}
             title={t.experience.internshipTitle}
-            count={internshipItems.length}
             note={t.experience.internshipNote}
-            entriesLabel={t.experience.entriesLabel}
           />
           <ExperienceRail
             items={internshipItems}
@@ -244,23 +249,17 @@ export default function Experience() {
           />
         </section>
         <section className="relative">
-          <div className="mb-7 flex items-end justify-between gap-4">
+          <div className="mb-7">
             <SectionKicker
               icon={GraduationCap}
               title={t.experience.educationTitle}
-              count={educationItems.length}
               note={t.experience.educationNote}
-              entriesLabel={t.experience.entriesLabel}
             />
-            <span className="mb-1 hidden font-mono text-[10px] uppercase tracking-[.2em] text-[var(--text-muted)] sm:block">
-              {t.experience.learningLog}
-            </span>
           </div>
           <EducationIndex
             items={educationItems}
             emptyLabel={t.experience.emptyEducation}
             labels={t.experience}
-            language={language}
           />
         </section>
       </div>

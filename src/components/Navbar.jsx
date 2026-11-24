@@ -103,7 +103,7 @@ export default function Navbar() {
         backgroundColor: "color-mix(in srgb, var(--page-bg) 88%, transparent)",
       }}
     >
-      <nav className="container-width flex h-[76px] items-center justify-between">
+      <nav className="navbar-inner container-width flex h-[76px] items-center justify-between">
         <Link
           to="/"
           onClick={() => setActive("top")}
@@ -115,7 +115,7 @@ export default function Navbar() {
             alt="Harith Hakim — Web Developer"
           />
         </Link>
-        <div className="hidden items-center gap-7 md:flex">
+        <div className="hidden items-center gap-5 lg:flex xl:gap-7">
           <button
             onClick={() => goToSection("top")}
             className={navClass("top")}
@@ -128,7 +128,7 @@ export default function Navbar() {
           {sectionButton("experience", t.nav.experience)}
           {sectionButton("contact", t.nav.contact)}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="navbar-actions flex shrink-0 items-center gap-2">
           <button
             onClick={() => setLanguage(language === "en" ? "id" : "en")}
             className="inline-flex h-10 items-center gap-1.5 rounded-full border border-zinc-200 px-3 text-xs font-semibold transition hover:border-[var(--accent)] hover:text-[var(--accent)] dark:border-zinc-700"
@@ -146,7 +146,7 @@ export default function Navbar() {
           </button>
           <button
             onClick={() => setOpen(!open)}
-            className="rounded-full border border-zinc-200 p-2 dark:border-zinc-700 md:hidden"
+            className="rounded-full border border-zinc-200 p-2 dark:border-zinc-700 lg:hidden"
             aria-label="Toggle navigation"
           >
             {open ? <X size={19} /> : <Menu size={19} />}
@@ -154,7 +154,7 @@ export default function Navbar() {
         </div>
       </nav>
       {open && (
-        <div className="container-width flex flex-col gap-4 border-t border-zinc-200 py-5 dark:border-zinc-800 md:hidden">
+        <div className="container-width flex flex-col gap-4 border-t border-zinc-200 py-5 dark:border-zinc-800 lg:hidden">
           <button
             onClick={() => goToSection("top")}
             className={`text-left ${navClass("top")}`}

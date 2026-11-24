@@ -24,21 +24,21 @@ export default function About() {
   const { t } = useLanguage();
   return (
     <section className="section-space border-y border-zinc-100/70 dark:border-zinc-900 section-alt">
-      <div className="container-width grid gap-12 md:grid-cols-[.8fr_1.2fr]">
+      <div className="container-width grid min-w-0 gap-10 lg:grid-cols-[.8fr_1.2fr]">
         <div>
           <SectionTitle eyebrow={t.about.eyebrow} title={t.about.title} />
         </div>
-        <div>
-          <p className="muted text-lg leading-8">{t.about.p1}</p>
-          <p className="muted mt-5 leading-7">{t.about.p2}</p>
-          <div className="mt-9 grid gap-4 sm:grid-cols-3">
+        <div className="min-w-0">
+          <p className="muted break-words text-base leading-7 sm:text-lg sm:leading-8">{t.about.p1}</p>
+          <p className="muted mt-5 break-words leading-7">{t.about.p2}</p>
+          <div className="mt-9 grid min-w-0 gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {highlights.map(({ icon: Icon, title, text }, index) => (
-              <div key={title} className="surface rounded-xl p-5">
+              <div key={title} className="surface min-w-0 rounded-xl p-5">
                 <Icon className="text-violet-600" size={22} />
-                <h3 className="mt-4 font-bold">
+                <h3 className="mt-4 break-words font-bold leading-snug">
                   {t.about.highlights[index].title}
                 </h3>
-                <p className="muted mt-2 text-sm leading-6">
+                <p className="muted mt-2 break-words text-sm leading-6">
                   {t.about.highlights[index].text}
                 </p>
               </div>

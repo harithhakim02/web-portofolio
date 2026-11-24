@@ -1,18 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 import SectionTitle from "../components/SectionTitle";
 import ProjectCard from "../components/ProjectCard";
 import { projects } from "../data/projects";
+import { projectCategories } from "../data/projectCategories";
 import { useLanguage } from "../contexts/LanguageContext";
 
 export default function ProjectsPage() {
   const { language } = useLanguage();
   const location = useLocation();
   const [category, setCategory] = useState("All");
-  const categories = [
-    "All",
-    ...new Set(projects.map((project) => project.category)),
-  ];
+  const categories = projectCategories;
   const filtered = useMemo(
     () =>
       category === "All"
@@ -51,29 +50,33 @@ export default function ProjectsPage() {
 
   return (
     <section className="container-width min-h-[70vh] py-20">
+      <Link
+        to="/"
+        state={{ scrollTo: "projects" }}
+        className="project-back-link mb-8"
+      >
+        <ArrowLeft size={16} aria-hidden="true" />
+        {language === "id" ? "Kembali ke beranda" : "Back to home"}
+      </Link>
       <SectionTitle
         eyebrow={copy.eyebrow}
         title={copy.title}
         description={copy.description}
       />
-      <div className="my-9 flex flex-wrap gap-2">
+      <div className="projects-category-list my-9 flex flex-wrap gap-2">
+        <button
+          onClick={() => setCategory("All")}
+          className={`projects-category-chip rounded-full px-4 py-2 text-sm transition ${category === "All" ? "is-active" : ""}`}
+        >
+          {copy.all}
+        </button>
         {categories.map((item) => (
           <button
-            key={item}
-            onClick={() => setCategory(item)}
-            className={`rounded-full px-4 py-2 text-sm transition ${category === item ? "bg-[var(--accent)] text-white" : "border border-zinc-200 hover:border-[var(--accent)] dark:border-zinc-700"}`}
+            key={item.value}
+            onClick={() => setCategory(item.value)}
+            className={`projects-category-chip rounded-full px-4 py-2 text-sm transition ${category === item.value ? "is-active" : ""}`}
           >
-            {item === "All"
-              ? copy.all
-              : language === "id"
-                ? item === "Frontend Website"
-                  ? "Website Frontend"
-                  : item === "Web Application"
-                    ? "Aplikasi Web"
-                    : item === "Dashboard"
-                      ? "Dasbor"
-                      : item
-                : item}
+            {item.label[language] || item.label.en || item.value}
           </button>
         ))}
       </div>

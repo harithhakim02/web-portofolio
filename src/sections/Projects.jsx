@@ -18,7 +18,7 @@ export default function Projects() {
           />
           <Link
             to="/projects"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-violet-600 hover:gap-3"
+            className="projects-view-all inline-flex items-center gap-2 text-sm font-semibold transition-all"
           >
             {t.projects.all} <ArrowUpRight size={17} />
           </Link>

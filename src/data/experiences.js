@@ -1,5 +1,4 @@
 export const experiences = [
-  // ===================== WORK EXPERIENCE =====================
   {
     id: "fure",
     type: "Experience",
@@ -12,8 +11,6 @@ export const experiences = [
       id: "Jelaskan antarmuka yang kamu kembangkan, tanggung jawab yang kamu jalankan, serta dampak dari kontribusimu.",
     },
   },
-
-  // ===================== INTERNSHIP EXPERIENCE =====================
 
   {
     id: "pt-disty",
@@ -41,13 +38,12 @@ export const experiences = [
     },
   },
 
-  // ===================== EDUCATION =====================
   {
     id: "upn",
     type: "Education",
     role: "Informatika",
+    logo: "/institutions/education/logo-upn.webp",
     place: `UPN "Veteran" Jawa Timur`,
-    logo: "/institutions/education/logo-upn.webp", // contoh: "/institutions/university-logo.png"
     period: "2020-2025",
   },
 ];
