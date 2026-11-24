@@ -82,13 +82,15 @@ export default function Hero() {
         <div className="hero-photo-frame relative aspect-[4/5] overflow-hidden rounded-[2.2rem] border p-3">
           <div className="relative h-full overflow-hidden rounded-[1.65rem]">
             <img
-              src="/profile-photo.webp"
+              src="/profile-photo-1080.webp"
+              srcSet="/profile-photo-520.webp 520w, /profile-photo-840.webp 840w, /profile-photo-1080.webp 1080w"
+              sizes="(max-width: 767px) calc(100vw - 58px), (max-width: 1100px) min(314px, calc(34vw - 26px)), 364px"
               alt="Foto profil Hakim"
               loading="eager"
               fetchPriority="high"
               decoding="async"
-              width="840"
-              height="1050"
+              width="1080"
+              height="1350"
               className="h-full w-full object-cover object-center"
             />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-slate-950/10" />
